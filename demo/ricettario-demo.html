@@ -61,7 +61,8 @@ body.bare #app { padding-bottom: 24px; }
 /* ---------- App bar / ricerca ---------- */
 .appbar { display: flex; align-items: center; gap: 4px; min-height: 64px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--surface); margin-inline: -4px; padding-inline: 4px; }
 .appbar .title { flex: 1; font: 500 1.35rem 'Roboto'; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.hero { padding: 20px 4px 8px; }
+.hero { padding: 20px 4px 8px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.hero .icon-btn { margin-top: 4px; }
 .hero .kicker { color: var(--primary); font: 500 .8rem 'Roboto'; letter-spacing: .12em; text-transform: uppercase; }
 .hero h1 { font: 700 2.4rem/1.1 'Roboto'; letter-spacing: -.02em; margin-top: 4px; }
 .search { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; padding: 8px 0; background: var(--surface); }
@@ -241,6 +242,15 @@ function snack(msg) {
   document.body.append(el); setTimeout(() => el.remove(), 3200);
 }
 
+/* ---------------- tema: automatico (dispositivo) / chiaro / scuro ---------------- */
+const THEMES = ['auto', 'light', 'dark'];
+const THEME_UI = { auto: ['brightness_auto', 'automatico'], light: ['light_mode', 'chiaro'], dark: ['dark_mode', 'scuro'] };
+const getTheme = () => (THEMES.includes(lsGet('ricettario.theme', 'auto')) ? lsGet('ricettario.theme', 'auto') : 'auto');
+function applyTheme(t) { const root = document.documentElement; t === 'auto' ? root.removeAttribute('data-theme') : root.setAttribute('data-theme', t); }
+if (getTheme() !== 'auto') applyTheme(getTheme()); // senza scelta salvata non tocco nulla: vale il tema del dispositivo (o quello imposto dall'host)
+const themeBtn = () => `<button class="icon-btn tonal" id="theme" aria-label="Tema: ${THEME_UI[getTheme()][1]}. Tocca per cambiare" title="Tema: ${THEME_UI[getTheme()][1]}">${ic(THEME_UI[getTheme()][0])}</button>`;
+const heroHtml = (kicker, title) => `<header class="hero"><div><div class="kicker">${kicker}</div><h1>${title}</h1></div>${themeBtn()}</header>`;
+
 /* ---------------- dati e salvataggio ---------------- */
 async function loadBase() { return DATA; }
 
@@ -416,7 +426,7 @@ function footHtml() {
 }
 
 function viewHome() {
-  $app.innerHTML = `<header class="hero"><div class="kicker">Cucina di famiglia</div><h1>Il Ricettario</h1></header>
+  $app.innerHTML = `${heroHtml('Cucina di famiglia', 'Il Ricettario')}
     ${searchBar()}${chipsHtml()}<div id="results"></div>${footHtml()}${fab()}`;
   renderResults();
 }
@@ -429,7 +439,7 @@ function renderResults() {
 const tocItem = (r) => { const c = catOf(r.cat); return `<li><a class="list-item" href="#r-${r.id}" style="--c:${c.color}"><span class="n">${r.pos}</span>
   <span class="t">${esc(r.title)}${r.subtitle ? `<small>${esc(r.subtitle)}</small>` : ''}</span><span class="e">${esc(r.emoji)}</span></a></li>`; };
 function viewToc() {
-  $app.innerHTML = `<header class="hero"><div class="kicker">Tutte le ricette</div><h1>Indice</h1></header>${searchBar()}
+  $app.innerHTML = `${heroHtml('Tutte le ricette', 'Indice')}${searchBar()}
     <div class="seg" role="group" aria-label="Ordinamento">${[['num', 'Per numero'], ['cat', 'Per categoria'], ['az', 'A–Z']].map(([k, l]) => `<button data-toc="${k}" aria-pressed="${state.tocMode === k}">${l}</button>`).join('')}</div>
     <div id="results"></div>${fab()}`;
   renderToc();
@@ -621,6 +631,10 @@ document.addEventListener('click', async (e) => {
   if (t.id === 'clear') { state.q = ''; const i = document.getElementById('q'); i.value = ''; i.focus(); i.dispatchEvent(new Event('input', { bubbles: true })); }
   else if (t.dataset.cat) { state.cat = t.dataset.cat; document.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', c.dataset.cat === state.cat)); renderResults(); }
   else if (t.dataset.toc) { state.tocMode = t.dataset.toc; document.querySelectorAll('[data-toc]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.toc === state.tocMode)); renderToc(); }
+  else if (t.id === 'theme') {
+    const next = THEMES[(THEMES.indexOf(getTheme()) + 1) % THEMES.length]; lsSet('ricettario.theme', next); applyTheme(next);
+    t.outerHTML = themeBtn(); snack(`Tema ${THEME_UI[next][1]}`);
+  }
   else if (t.id === 'random') { const pool = state.recipes; if (pool.length) location.hash = `#r-${pool[Math.floor(Math.random() * pool.length)].id}`; }
   else if (t.id === 'reset-all') { if (!state.resetArmed) { state.resetArmed = true; t.textContent = 'Tocca ancora per confermare'; setTimeout(() => { state.resetArmed = false; if (t.isConnected) t.textContent = 'Ripristina il ricettario originale'; }, 4000); } else { state.resetArmed = false; await localStore.reset(); await loadData(); snack('Ricettario originale ripristinato'); route(); } }
   else if (t.id === 'signout') { await store.signOut(); snack('Disconnesso'); }

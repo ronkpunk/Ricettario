@@ -54,7 +54,8 @@ body.bare #app { padding-bottom: 24px; }
 /* ---------- App bar / ricerca ---------- */
 .appbar { display: flex; align-items: center; gap: 4px; min-height: 64px; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--surface); margin-inline: -4px; padding-inline: 4px; }
 .appbar .title { flex: 1; font: 500 1.35rem 'Roboto'; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.hero { padding: 20px 4px 8px; }
+.hero { padding: 20px 4px 8px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.hero .icon-btn { margin-top: 4px; }
 .hero .kicker { color: var(--primary); font: 500 .8rem 'Roboto'; letter-spacing: .12em; text-transform: uppercase; }
 .hero h1 { font: 700 2.4rem/1.1 'Roboto'; letter-spacing: -.02em; margin-top: 4px; }
 .search { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; padding: 8px 0; background: var(--surface); }
