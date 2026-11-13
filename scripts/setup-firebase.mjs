@@ -43,7 +43,7 @@ if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith
   console.log('▶ Cerco/creo l’app web…');
   const list = fb(['apps:list', 'WEB'], { json: true, allowFail: true });
   let appId = (list.result || []).find((a) => a.platform === 'WEB' || a.appId)?.appId;
-  if (!appId) appId = fb(['apps:create', 'WEB', 'Ricettario'], { json: true }).result?.appId;
+  if (!appId) appId = fb(['apps:create', 'WEB', 'Ricettando'], { json: true }).result?.appId;
   if (!appId) throw new Error('Impossibile ottenere l’appId: crea un’app web dalla Console Firebase e rilancia.');
 
   console.log('▶ Scrivo public/firebase-config.js…');

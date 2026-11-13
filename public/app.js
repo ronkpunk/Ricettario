@@ -211,7 +211,7 @@ function footHtml() {
 }
 
 function viewHome() {
-  $app.innerHTML = `${heroHtml('Cucina di famiglia', 'Il Ricettario')}
+  $app.innerHTML = `${heroHtml('Cucina di famiglia', 'Ricettando')}
     ${searchBar()}${chipsHtml()}<div id="results"></div>${footHtml()}${fab()}`;
   renderResults();
 }

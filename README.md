@@ -1,4 +1,4 @@
-# 🍳 Il Ricettario
+# 🍳 Ricettando
 
 Web app mobile-first con le 37 ricette del ricettario di famiglia: indice, ricerca (per titolo, ingrediente, testo),
 ingredienti **scalabili per numero di persone**, procedimento a passi spuntabili, funzionamento offline (PWA).

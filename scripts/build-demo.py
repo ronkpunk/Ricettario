@@ -19,7 +19,7 @@ js = sub(js, "async function loadBase() { const r = await fetch('data/recipes.js
 js = sub(js, "  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});\n", '')
 js = js.replace('</script>', '<\\/script>')
 
-html = f'''<title>Il Ricettario</title>
+html = f'''<title>Ricettando</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
