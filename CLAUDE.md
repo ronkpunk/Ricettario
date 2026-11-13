@@ -10,6 +10,7 @@ Vedi `README.md` per struttura e comandi.
 4. Ricorda all'utente i due passi manuali: abilitare **Google** in Authentication e toccare «Importa le ricette su Firestore» nell'app.
 
 ## Regole
-- Scrittura Firestore consentita solo a `ronkpunk@gmail.com` (`firestore.rules`, funzione `isOwner()`).
+- Ruoli in `users/{uid}` (user / editor / admin, status active / disabled): lettura ricette pubblica; scrivono ricette editor e admin; suggeriscono solo i registrati attivi; solo l'admin gestisce gli utenti. `ronkpunk@gmail.com` (email verificata) è sempre admin (`firestore.rules`, funzione `bootAdmin()`). Progetto completo in `docs/gestione-utenti.md`; test delle regole: `npm run test:rules`.
+- `.firebaserc` parte vuoto: lo scrive `npm run setup -- <project-id>`. Se il CLI lamenta un project id non valido, controlla quel file.
 - Non committare `serviceAccount*.json` né chiavi. `public/firebase-config.js` può essere committato (è config pubblica).
 - Dopo modifiche a `public/app.js` o `public/style.css` rigenera la demo: `python3 scripts/build-demo.py`.
