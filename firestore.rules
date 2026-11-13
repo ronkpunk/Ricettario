@@ -1,9 +1,14 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Il ricettario è pubblico in sola lettura; la scrittura avviene solo
-    // dallo script di seed con le credenziali di servizio (che ignorano le regole).
-    match /recipes/{id} { allow read: if true; allow write: if false; }
-    match /meta/{id}    { allow read: if true; allow write: if false; }
+    // Lettura pubblica. Scrittura (aggiungere, modificare, eliminare ricette) solo per
+    // gli account Google elencati qui sotto: sostituisci con la tua email.
+    function isOwner() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in ['TUA_EMAIL@gmail.com'];
+    }
+    match /recipes/{id} { allow read: if true; allow write: if isOwner(); }
+    match /meta/{id}    { allow read: if true; allow write: if isOwner(); }
   }
 }

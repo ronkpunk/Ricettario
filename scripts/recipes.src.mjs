@@ -30,7 +30,6 @@ export const RECIPES = [
   },
   {
     num: 2, title: 'Torta di rose 1 (Rosanna)', cat: 'lievitati', emoji: '🌹', servings: 8, guess: true,
-    note: 'Vedi anche Danubio dolce (n. 23).',
     ingredients: [
       G('Impasto', [
         '750 g farina|500 g in inverno', '90 g zucchero', '2 uova', '60 g burro morbido',
@@ -40,7 +39,7 @@ export const RECIPES = [
       G('Farcitura', ['40 g zucchero|di canna, a velo e cannella', '40 g burro morbido']),
     ],
     steps: [G(null, [
-      'Per aumentare l’elasticità si può iniziare con il roux (tipo Shokupan): 3 cucchiai di farina e una tazza di latte caldo, mescolando in continuazione, cuocere a fuoco lento evitando la formazione di grumi, eventualmente aggiungere latte. Coprire con una pellicola e lasciar riposare un paio d’ore in frigorifero, meglio tutta la notte.',
+      'Per aumentare l’elasticità si può iniziare con il roux: 3 cucchiai di farina e una tazza di latte caldo, mescolando in continuazione, cuocere a fuoco lento evitando la formazione di grumi, eventualmente aggiungere latte. Coprire con una pellicola e lasciar riposare un paio d’ore in frigorifero, meglio tutta la notte.',
       'In una terrina media mettere tre cucchiai di farina, un cucchiaino di zucchero, il lievito e mescolare, continuando a mescolare aggiungere a filo un bicchiere di latte tiepido; lasciar lievitare per circa ½ ora, quando si è alzato mescolare e lasciar lievitare ancora poi iniziare l’impasto.',
       'Mettere farina, zucchero, limone grattugiato e iniziare a mescolare, aggiungere il roux se è stato fatto e le uova (NON il burro), impastare veloce per 10’. Ammorbidire il burro e aggiungerlo poco per volta, mescolando veloce fino ad ottenere un impasto poco appiccicoso, se necessario aggiungere uno o due cucchiai di farina.',
       'Mettere a lievitare al coperto, in una busta di plastica, in base alla temperatura posso bastare 2 o 3 ore, in inverno anche 4. Quando ha lievitato (raddoppiato il volume) tagliare in due e tirare delle sfoglie tonde alte mezzo centimetro.',
@@ -50,8 +49,14 @@ export const RECIPES = [
   },
   {
     num: 3, title: 'Krapfen', cat: 'colazione', emoji: '🍩', servings: 6,
-    ingredients: [G(null, ['50 g lievito di birra', '7 uova', '150 g zucchero', '120 g burro'])],
-    steps: [G(null, ['Procedere come per le brioches (vedi Torta di rose 2, n. 26).'])],
+    note: 'La quantità di farina non era indicata: regolala a occhio fino a ottenere una pasta morbida, e controlla tempi e cottura.',
+    ingredients: [G(null, ['50 g lievito di birra', '7 uova', '150 g zucchero', '120 g burro', 'Farina q.b.|quantità non indicata', 'Acqua tiepida q.b.', 'Un pizzico sale'])],
+    steps: [G(null, [
+      'Sciogliere il lievito nell’acqua tiepida, aggiungere un cucchiaino di zucchero e 2-3 cucchiai di farina fino ad ottenere una cremina; coprire e lasciar lievitare per mezz’ora in un luogo tiepido, fino a quando diventa spumoso.',
+      'Aggiungere le uova, il burro fuso e sbattere bene, aggiungendo poi lo zucchero e la farina, mescolando per ottenere una pasta morbida. Aggiungere il sale, lasciando poi riposare per circa 2 ore coprendo e in un posto tiepido.',
+      'Stendere l’impasto, ritagliare i krapfen, adagiarli in una teglia e lasciar riposare per un’altra mezz’ora.',
+      'Infornare in forno preriscaldato a 200° e cuocere per mezz’ora.',
+    ])],
   },
   {
     num: 4, title: 'Chiacchere e Favin', cat: 'dolci', emoji: '🎉', servings: 4,
@@ -66,17 +71,22 @@ export const RECIPES = [
         '1 bustina lievito', '1 limone grattugiato', '1 pizzico sale',
       ]),
     ],
-    steps: [G(null, [
-      'Sbattere le uova con la scorza di limone, zucchero, grappa poi mettere nell’impastatrice con metà farina e la vanillina. Continuare ad impastare con il resto della farina e il cucchiaio di olio, alla fine impastare duro a mano aggiungendo farina se necessario. Lasciare riposare in frigo per un paio d’ore e tirare sottile, la pasta deve essere quasi trasparente.',
-      'Tagliare dei rettangoli da 5 x 10 cm, fare due incisioni all’interno (senza tagliare), prendere una striscia e inserirla nell’altra (o agitarla con un bastoncino) e friggere con strutto (olio di semi) per pochi secondi.',
-      'Per i Favin fare un rotolino da circa 2 cm e tagliare ogni 2 cm ruotando l’impasto ogni volta.',
-    ])],
+    steps: [
+      G('Chiacchere', [
+        'Sbattere le uova con la scorza di limone, zucchero, grappa poi mettere nell’impastatrice con metà farina e la vanillina. Continuare ad impastare con il resto della farina e il cucchiaio di olio, alla fine impastare duro a mano aggiungendo farina se necessario. Lasciare riposare in frigo per un paio d’ore e tirare sottile, la pasta deve essere quasi trasparente.',
+        'Tagliare dei rettangoli da 5 x 10 cm, fare due incisioni all’interno (senza tagliare), prendere una striscia e inserirla nell’altra (o agitarla con un bastoncino) e friggere con strutto (olio di semi) per pochi secondi.',
+      ]),
+      G('Favin', [
+        'Sbattere le uova con la scorza di limone, lo zucchero, il cognac e il sale, poi unire la farina e il lievito e impastare fino a ottenere un impasto sodo, aggiungendo farina se necessario. Lasciare riposare in frigo per un paio d’ore.',
+        'Fare un rotolino da circa 2 cm e tagliare ogni 2 cm ruotando l’impasto ogni volta. Friggere con strutto (olio di semi) per pochi secondi.',
+      ]),
+    ],
   },
   {
     num: 5, title: 'Pan dei morti', cat: 'dolci', emoji: '🍪', servings: 10,
     ingredients: [G(null, [
       '500 g farina', '500 g zucchero', '100 g cacao', '250 ml vino nero',
-      'Droghe q.b.', 'Uvetta q.b.', 'Lievito q.b.',
+      'Droghe q.b.', 'Uvetta q.b.', 'Lievito q.b.', 'Pinoli q.b.', 'Zucchero a velo q.b.',
     ])],
     steps: [G(null, [
       'Scaldare il vino, mettere lo zucchero, poi cacao, uvetta e le droghe. Impastare sul marmo con la farina, aggiungere lo lievito. Ungersi le mani e fare delle formine mettendo i pinoli.',
@@ -90,18 +100,17 @@ export const RECIPES = [
   },
   {
     num: 7, title: 'Panpepato', cat: 'dolci', emoji: '🍫', servings: 20, guess: true,
-    note: 'Con le varianti per il Pan dei morti indicate tra parentesi.',
     ingredients: [G(null, [
-      '1 kg farina', '1 kg zucchero', '200 g cacao puro', '500 g mandorle|no per Pan dei morti',
-      '200 g pinoli', '300 g cedrini|usare uvetta per Pan dei morti', '25 g droghe', '500 ml vino nero',
-      'Cioccolato per copertura|no per Pan dei morti', '2 bustine lievito',
+      '1 kg farina', '1 kg zucchero', '200 g cacao puro', '500 g mandorle',
+      '200 g pinoli', '300 g cedrini', '25 g droghe', '500 ml vino nero',
+      'Cioccolato per copertura', '2 bustine lievito',
     ])],
     steps: [G(null, [
       'Scaldare il vino, aggiungere lo zucchero, cacao e cioccolato.',
-      'Quando è tutto amalgamato togliere dal fuoco e impastare con la farina e gli altri ingredienti. Molto duro per Panpepato (un po’ meno per Pan dei morti).',
-      'Ungersi le mani e formare delle cupole da 10-15 cm, oppure piccole ovali per Pan dei Morti.',
-      'Mettere distanziati 3-4 cm su carta da forno, cuocere a fuoco moderato per 45 minuti (15 minuti per Pan dei morti).',
-      'Lasciar stagionare 15-20 giorni in sacchetti di plastica chiusi all’esterno (non per Pan dei morti).',
+      'Quando è tutto amalgamato togliere dal fuoco e impastare con la farina e gli altri ingredienti. Deve risultare molto duro.',
+      'Ungersi le mani e formare delle cupole da 10-15 cm.',
+      'Mettere distanziati 3-4 cm su carta da forno, cuocere a fuoco moderato per 45 minuti.',
+      'Lasciar stagionare 15-20 giorni in sacchetti di plastica chiusi all’esterno.',
     ])],
   },
   {
@@ -121,6 +130,7 @@ export const RECIPES = [
     num: 10, title: 'Pesche ripiene', cat: 'dolci', emoji: '🍑', servings: 6,
     ingredients: [G(null, ['1 sacchetto amaretti', '3 cucchiai zucchero', '1 o 2 uova', '10 o 12 pesche'])],
     steps: [G(null, [
+      'Preparare il ripieno frantumando gli amaretti e mescolandoli con lo zucchero e le uova.',
       'Mettere sul fondo della pentola vino bianco o marsala, poi le pesche scavate e riempite con il ripieno.',
       'Infornare a caldo.',
       'Servire con zabaione.',
@@ -152,7 +162,11 @@ export const RECIPES = [
       'Scaldare il latte a parte con una scorza di limone.',
       'Sciogliere il burro in una pentola dove poter mettere tutti gli ingredienti, aggiungere lentamente la farina spolverandola e, sempre mescolando con la frusta, lasciare cuocere per ad ottenere una leggera tostatura.',
       'Aggiungere il latte preriscaldato a filo, sempre mescolando per evitare i grumi, vaniglia, Suk e lo zucchero, alla fine il cacao spolverato e il cioccolato.',
-    ]), G('Variante Zina', ['Mettere lo zucchero prima del latte e poi continuare come sopra.'])],
+    ]), G('Variante Zina', [
+      'Scaldare il latte a parte con una scorza di limone.',
+      'Sciogliere il burro in una pentola dove poter mettere tutti gli ingredienti, aggiungere lentamente la farina spolverandola e, sempre mescolando con la frusta, lasciare cuocere fino ad ottenere una leggera tostatura.',
+      'Aggiungere lo zucchero prima del latte, poi il latte preriscaldato a filo, sempre mescolando per evitare i grumi, la vaniglia e il Suk; alla fine il cacao spolverato e il cioccolato.',
+    ])],
   },
   {
     num: 14, title: 'Passatelli', cat: 'primi', emoji: '🍜', servings: 6, guess: true,

@@ -5,21 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Il Ricettario</title>
   <meta name="description" content="Il ricettario di famiglia: ricette con ingredienti scalabili per numero di persone.">
-  <meta name="theme-color" content="#ff6b4a">
+  <meta name="theme-color" content="#b3321a">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=block" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="app" aria-live="polite"></div>
   <nav id="tabbar" aria-label="Navigazione principale">
-    <a href="#/" data-tab="home"><span>🍳</span>Ricette</a>
-    <a href="#/indice" data-tab="indice"><span>📖</span>Indice</a>
-    <button type="button" id="random"><span>🎲</span>A sorpresa</button>
+    <a href="#ricette"><span class="pillbox"><span class="ms">restaurant_menu</span></span>Ricette</a>
+    <a href="#indice"><span class="pillbox"><span class="ms">menu_book</span></span>Indice</a>
+    <button type="button" id="random"><span class="pillbox"><span class="ms">casino</span></span>A sorpresa</button>
   </nav>
   <script type="module" src="app.js"></script>
 </body>
