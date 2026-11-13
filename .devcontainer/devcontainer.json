@@ -1,0 +1,12 @@
+{
+  "name": "Ricettario",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "postCreateCommand": "sudo chown -R node:node /home/node/.config && npm install && sudo npm install -g firebase-tools@latest @anthropic-ai/claude-code",
+  // Il login di Firebase usa localhost:9005 per il callback del browser.
+  "forwardPorts": [9005, 5000, 8080],
+  // Il login Firebase sopravvive alle ricostruzioni del container.
+  "mounts": ["source=ricettario-firebase-config,target=/home/node/.config/configstore,type=volume"],
+  "customizations": {
+    "vscode": { "extensions": ["anthropic.claude-code", "dbaeumer.vscode-eslint"] }
+  }
+}

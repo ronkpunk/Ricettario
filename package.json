@@ -8,6 +8,6 @@
     "setup": "node scripts/setup-firebase.mjs"
   },
   "devDependencies": {
-    "firebase-tools": "^13.29.0"
+    "firebase-tools": "^14.0.0"
   }
 }
