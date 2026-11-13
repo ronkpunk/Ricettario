@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Il ricettario è pubblico in sola lettura; la scrittura avviene solo
+    // dallo script di seed con le credenziali di servizio (che ignorano le regole).
+    match /recipes/{id} { allow read: if true; allow write: if false; }
+    match /meta/{id}    { allow read: if true; allow write: if false; }
+  }
+}
