@@ -4,8 +4,10 @@
   "type": "module",
   "scripts": {
     "build:data": "node scripts/build-data.mjs",
-    "seed": "node scripts/seed.mjs",
-    "deploy": "firebase deploy --only firestore:rules,hosting"
+    "deploy": "firebase deploy --only firestore:rules,hosting",
+    "setup": "node scripts/setup-firebase.mjs"
   },
-  "devDependencies": { "firebase-admin": "^12.7.0", "firebase-tools": "^13.29.0" }
+  "devDependencies": {
+    "firebase-tools": "^13.29.0"
+  }
 }

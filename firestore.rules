@@ -2,11 +2,11 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     // Lettura pubblica. Scrittura (aggiungere, modificare, eliminare ricette) solo per
-    // gli account Google elencati qui sotto: sostituisci con la tua email.
+    // gli account Google elencati qui sotto.
     function isOwner() {
       return request.auth != null
         && request.auth.token.email_verified == true
-        && request.auth.token.email in ['TUA_EMAIL@gmail.com'];
+        && request.auth.token.email in ['ronkpunk@gmail.com'];
     }
     match /recipes/{id} { allow read: if true; allow write: if isOwner(); }
     match /meta/{id}    { allow read: if true; allow write: if isOwner(); }

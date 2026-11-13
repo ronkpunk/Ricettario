@@ -291,6 +291,12 @@ async function makeFirestoreStore() {
     async signOut() { await au.signOut(auth); },
     async save(r) { await fs.setDoc(fs.doc(db, 'recipes', r.id), clean(r)); },
     async remove(id) { await fs.deleteDoc(fs.doc(db, 'recipes', id)); },
+    async importAll(recipes, categories) {
+      const b = fs.writeBatch(db);
+      recipes.forEach(({ pos, ...r }) => b.set(fs.doc(db, 'recipes', r.id), clean(r)));
+      b.set(fs.doc(db, 'meta', 'categories'), { list: categories });
+      await b.commit();
+    },
   };
 }
 
@@ -307,9 +313,9 @@ async function loadData() {
     try {
       const fsStore = await Promise.race([makeFirestoreStore(), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 8000))]);
       const data = await Promise.race([fsStore.load(), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 8000))]);
-      if (!data.recipes.length) throw new Error('collezione vuota');
-      store = fsStore; state.source = 'Firestore'; state.cats = data.categories || base.categories;
-      finalize(data.recipes); return;
+      store = fsStore; state.cats = data.categories || base.categories;
+      if (!data.recipes.length) { state.needsSeed = true; state.source = 'Firestore (ancora vuoto)'; finalize(base.recipes); return; }
+      state.needsSeed = false; state.source = 'Firestore'; finalize(data.recipes); return;
     } catch (e) { console.warn('Firestore non disponibile, uso i dati locali:', e); }
   }
   state.source = 'salvato su questo dispositivo';
@@ -421,6 +427,7 @@ const chipsHtml = () => `<div class="chips" role="group" aria-label="Categorie">
 function footHtml() {
   let extra = '';
   if (store.mode === 'locale') extra = `<br><button class="btn text" id="reset-all">${state.resetArmed ? 'Tocca ancora per confermare' : 'Ripristina il ricettario originale'}</button>`;
+  else if (state.needsSeed) extra = `<br><button class="btn tonal" id="seed">${ic('cloud_upload')}Importa le ricette su Firestore</button>`;
   else if (state.user) extra = `<br><button class="btn text" id="signout">Esci (${esc(state.user.email || '')})</button>`;
   return `<p class="foot">${state.recipes.length} ricette · ${esc(state.source)}${extra}</p>`;
 }
@@ -570,7 +577,7 @@ function viewEditor(id) {
 }
 async function ensureLogin() {
   if (!store.needsLogin || state.user) return true;
-  try { await store.signIn(); return !!state.user || true; } catch { snack('Accesso non riuscito'); return false; }
+  try { await store.signIn(); return true; } catch { snack('Accesso non riuscito'); return false; }
 }
 async function saveEditor(id) {
   const g = (k) => document.getElementById(k).value;
@@ -637,6 +644,11 @@ document.addEventListener('click', async (e) => {
   }
   else if (t.id === 'random') { const pool = state.recipes; if (pool.length) location.hash = `#r-${pool[Math.floor(Math.random() * pool.length)].id}`; }
   else if (t.id === 'reset-all') { if (!state.resetArmed) { state.resetArmed = true; t.textContent = 'Tocca ancora per confermare'; setTimeout(() => { state.resetArmed = false; if (t.isConnected) t.textContent = 'Ripristina il ricettario originale'; }, 4000); } else { state.resetArmed = false; await localStore.reset(); await loadData(); snack('Ricettario originale ripristinato'); route(); } }
+  else if (t.id === 'seed') {
+    if (!(await ensureLogin())) return;
+    try { await store.importAll(state.recipes, state.cats); await loadData(); snack('Ricette importate su Firestore'); route(); }
+    catch (err) { console.warn(err); snack('Import non riuscito: accedi con l’email autorizzata nelle regole'); }
+  }
   else if (t.id === 'signout') { await store.signOut(); snack('Disconnesso'); }
   else if (r && t.id === 'plus') { state.servings[r.id] = Math.min(99, state.servings[r.id] + 1); renderIngredients(r); }
   else if (r && t.id === 'minus') { state.servings[r.id] = Math.max(1, state.servings[r.id] - 1); renderIngredients(r); }
