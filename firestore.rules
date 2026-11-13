@@ -1,14 +1,62 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Lettura pubblica. Scrittura (aggiungere, modificare, eliminare ricette) solo per
-    // gli account Google elencati qui sotto.
-    function isOwner() {
-      return request.auth != null
-        && request.auth.token.email_verified == true
-        && request.auth.token.email in ['ronkpunk@gmail.com'];
+
+    // ---- Ruoli -------------------------------------------------------------
+    // Il ruolo sta in users/{uid} (role: user | editor | admin, status: active | disabled).
+    // L'admin di emergenza (email verificata) è sempre admin, anche senza documento.
+    function signedIn()  { return request.auth != null; }
+    function registered() { return signedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous'; }
+    function profilePath() { return /databases/$(database)/documents/users/$(request.auth.uid); }
+    function hasProfile() { return registered() && exists(profilePath()); }
+    function bootAdmin() {
+      return registered() && request.auth.token.email_verified == true
+        && request.auth.token.email == 'ronkpunk@gmail.com';
     }
-    match /recipes/{id} { allow read: if true; allow write: if isOwner(); }
-    match /meta/{id}    { allow read: if true; allow write: if isOwner(); }
+    function isActive() { return bootAdmin() || (hasProfile() && get(profilePath()).data.status == 'active'); }
+    function isAdmin()  { return bootAdmin() || (isActive() && get(profilePath()).data.role == 'admin'); }
+    function isEditor() { return isAdmin() || (isActive() && get(profilePath()).data.role == 'editor'); }
+
+    // ---- Ricette e categorie: lettura pubblica, scrittura editor/admin ------
+    match /recipes/{id} { allow read: if true; allow write: if isEditor(); }
+    match /meta/{id}    { allow read: if true; allow write: if isEditor(); }
+
+    // ---- Utenti ---------------------------------------------------------------
+    match /users/{uid} {
+      allow read: if registered() && (request.auth.uid == uid || isAdmin());
+
+      // Registrazione aperta: ognuno crea solo il proprio documento, sempre come utente standard attivo.
+      allow create: if registered() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['email', 'displayName', 'photoURL', 'role', 'status', 'createdAt', 'lastLoginAt'])
+        && request.resource.data.role == 'user'
+        && request.resource.data.status == 'active'
+        && request.resource.data.createdAt == request.time;
+
+      // L'utente aggiorna solo i dati anagrafici (mai ruolo/stato); l'admin può cambiare tutto.
+      allow update: if isAdmin()
+        || (registered() && request.auth.uid == uid && isActive()
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['email', 'displayName', 'photoURL', 'lastLoginAt']));
+
+      allow delete: if isAdmin();
+    }
+
+    // ---- Suggerimenti: solo utenti registrati e attivi -------------------------
+    match /suggestions/{id} {
+      allow create: if registered() && (bootAdmin() || isActive())
+        && request.resource.data.keys().hasOnly(['recipeId', 'proposed', 'comment', 'authorUid', 'authorName', 'status', 'createdAt'])
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.comment is string && request.resource.data.comment.size() <= 500
+        && request.resource.data.proposed is map
+        && request.resource.data.createdAt == request.time;
+
+      allow read: if isEditor() || (registered() && resource.data.authorUid == request.auth.uid);
+
+      // Gli editor/admin esaminano: cambiano solo stato e dati di revisione.
+      allow update: if isEditor()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'reviewedBy', 'reviewedAt', 'reviewNote']);
+
+      allow delete: if isEditor();
+    }
   }
 }

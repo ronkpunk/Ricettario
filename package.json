@@ -5,9 +5,12 @@
   "scripts": {
     "build:data": "node scripts/build-data.mjs",
     "deploy": "firebase deploy --only firestore:rules,hosting",
-    "setup": "node scripts/setup-firebase.mjs"
+    "setup": "node scripts/setup-firebase.mjs",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-ricettario \"node --test tests/rules.test.mjs\""
   },
   "devDependencies": {
-    "firebase-tools": "^14.0.0"
+    "firebase-tools": "^14.0.0",
+    "@firebase/rules-unit-testing": "^3.0.4",
+    "firebase": "^10.14.1"
   }
 }
